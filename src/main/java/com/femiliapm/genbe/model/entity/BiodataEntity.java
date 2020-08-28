@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,17 +22,18 @@ public class BiodataEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_bio", unique = true)
 	private Integer bioId;
-	
+
 	@Column(name = "nohp", length = 16)
 	private String nohp;
-	
+
 	@Column(name = "tanggal_lahir", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
 	private Date tglLahir;
-	
+
 	@Column(name = "tempat_lahir", length = 50)
 	private String tmptLahir;
-	
+
 	@OneToOne
 	@JoinColumn(name = "idperson", unique = true, nullable = false)
 	private PersonEntity personEntity;
