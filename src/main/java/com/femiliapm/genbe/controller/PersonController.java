@@ -1,11 +1,11 @@
 package com.femiliapm.genbe.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+//import java.util.List;
+//import java.util.stream.Collectors;
+//import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,18 +39,18 @@ public class PersonController {
 		return dto;
 	}
 
-	@GetMapping
-	public List<DetailBiodataDto> get() {
-		List<PersonEntity> personEntities = personRepository.findAll();
-		List<BiodataEntity> biodataEntities = biodataRepository.findAll();
-		List<DetailBiodataDto> detailPerson = personEntities.stream().map(this::convertToDtoFromPerson)
-				.collect(Collectors.toList());
-		List<DetailBiodataDto> detailBiodata = biodataEntities.stream().map(this::convertToDtoFromBiodata)
-				.collect(Collectors.toList());
-		List<DetailBiodataDto> detailBiodataDtos = Stream.of(detailPerson, detailBiodata).flatMap(x -> x.stream())
-				.collect(Collectors.toList());
-		return detailBiodataDtos;
-	}
+//	@GetMapping
+//	public List<DetailBiodataDto> get() {
+//		List<PersonEntity> personEntities = personRepository.findAll();
+//		List<BiodataEntity> biodataEntities = biodataRepository.findAll();
+//		List<DetailBiodataDto> detailPerson = personEntities.stream().map(this::convertToDtoFromPerson)
+//				.collect(Collectors.toList());
+//		List<DetailBiodataDto> detailBiodata = biodataEntities.stream().map(this::convertToDtoFromBiodata)
+//				.collect(Collectors.toList());
+//		List<DetailBiodataDto> detailBiodataDtos = Stream.of(detailPerson, detailBiodata).flatMap(x -> x.stream())
+//				.collect(Collectors.toList());
+//		return detailBiodataDtos;
+//	}
 
 	private PersonEntity convertToPersonEntity(DetailBiodataDto dto) {
 		PersonEntity personEntity = new PersonEntity();
@@ -71,19 +71,19 @@ public class PersonController {
 		return biodataEntity;
 	}
 
-	private DetailBiodataDto convertToDtoFromPerson(PersonEntity personEntity) {
-		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
-		detailBiodataDto.setNik(personEntity.getNiKep());
-		detailBiodataDto.setName(personEntity.getNama());
-		detailBiodataDto.setAddress(personEntity.getAlamat());
-		return detailBiodataDto;
-	}
-
-	private DetailBiodataDto convertToDtoFromBiodata(BiodataEntity biodataEntity) {
-		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
-		detailBiodataDto.setHp(biodataEntity.getNohp());
-		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
-		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
-		return detailBiodataDto;
-	}
+//	private DetailBiodataDto convertToDtoFromPerson(PersonEntity personEntity) {
+//		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+//		detailBiodataDto.setNik(personEntity.getNiKep());
+//		detailBiodataDto.setName(personEntity.getNama());
+//		detailBiodataDto.setAddress(personEntity.getAlamat());
+//		return detailBiodataDto;
+//	}
+//
+//	private DetailBiodataDto convertToDtoFromBiodata(BiodataEntity biodataEntity) {
+//		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+//		detailBiodataDto.setHp(biodataEntity.getNohp());
+//		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
+//		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
+//		return detailBiodataDto;
+//	}
 }

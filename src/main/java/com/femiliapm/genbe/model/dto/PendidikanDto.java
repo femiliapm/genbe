@@ -2,7 +2,7 @@ package com.femiliapm.genbe.model.dto;
 
 public class PendidikanDto {
 //	private Integer idPendidikan;
-//	private Integer idPerson;
+	private Integer idPerson;
 	private String jenjang;
 	private String institusi;
 	private String masuk;
@@ -15,14 +15,14 @@ public class PendidikanDto {
 //	public void setIdPendidikan(Integer idPendidikan) {
 //		this.idPendidikan = idPendidikan;
 //	}
-//
-//	public Integer getIdPerson() {
-//		return idPerson;
-//	}
-//
-//	public void setIdPerson(Integer idPerson) {
-//		this.idPerson = idPerson;
-//	}
+
+	public Integer getIdPerson() {
+		return idPerson;
+	}
+
+	public void setIdPerson(Integer idPerson) {
+		this.idPerson = idPerson;
+	}
 
 	public String getJenjang() {
 		return jenjang;
