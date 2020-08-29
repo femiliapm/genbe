@@ -17,8 +17,8 @@ import com.femiliapm.genbe.model.entity.BiodataEntity;
 import com.femiliapm.genbe.model.entity.PersonEntity;
 import com.femiliapm.genbe.repository.BiodataRepository;
 import com.femiliapm.genbe.repository.PersonRepository;
-import com.femiliapm.genbe.service.PersonService;
-import com.femiliapm.genbe.service.PersonServiceImpl;
+import com.femiliapm.genbe.service.AllService;
+import com.femiliapm.genbe.service.AllServiceImpl;
 
 @RestController
 @RequestMapping("/person")
@@ -27,7 +27,7 @@ public class PersonController {
 //	private final BiodataRepository biodataRepository;
 
 	@Autowired
-	private PersonService personService = new PersonServiceImpl();
+	private AllService personService = new AllServiceImpl();
 
 	@Autowired
 	public PersonController(PersonRepository personRepository, BiodataRepository biodataRepository) {
