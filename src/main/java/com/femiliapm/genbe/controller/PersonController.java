@@ -12,31 +12,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.femiliapm.genbe.model.dto.DetailBiodataDto;
+import com.femiliapm.genbe.model.dto.StatusMessageDto;
 import com.femiliapm.genbe.model.entity.BiodataEntity;
 import com.femiliapm.genbe.model.entity.PersonEntity;
 import com.femiliapm.genbe.repository.BiodataRepository;
 import com.femiliapm.genbe.repository.PersonRepository;
+import com.femiliapm.genbe.service.PersonService;
+import com.femiliapm.genbe.service.PersonServiceImpl;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
 	private final PersonRepository personRepository;
-	private final BiodataRepository biodataRepository;
+//	private final BiodataRepository biodataRepository;
+
+	@Autowired
+	private PersonService personService = new PersonServiceImpl();
 
 	@Autowired
 	public PersonController(PersonRepository personRepository, BiodataRepository biodataRepository) {
 		this.personRepository = personRepository;
-		this.biodataRepository = biodataRepository;
+//		this.biodataRepository = biodataRepository;
 	}
 
 	@PostMapping
-	public DetailBiodataDto insert(@RequestBody DetailBiodataDto dto) {
-		PersonEntity personEntity = convertToPersonEntity(dto);
-		personRepository.save(personEntity);
-		dto.setIdPerson(personEntity.getPersonId());
-		BiodataEntity biodataEntity = convertToBiodataEntity(dto);
-		biodataRepository.save(biodataEntity);
-		return dto;
+	public StatusMessageDto insert(@RequestBody DetailBiodataDto dto) {
+		if (dto.getNik().length() != 16) {
+			return dataGagalNik();
+		} else {
+			PersonEntity personEntity = convertToPersonEntity(dto);
+//			personRepository.save(personEntity);
+			personService.insertDataPerson(personEntity);
+			dto.setIdPerson(personEntity.getPersonId());
+			BiodataEntity biodataEntity = convertToBiodataEntity(dto);
+//			biodataRepository.save(biodataEntity);
+			personService.insertDataBiodata(biodataEntity);
+			return dataBerhasil();
+		}
 	}
 
 //	@GetMapping
@@ -51,6 +63,27 @@ public class PersonController {
 //				.collect(Collectors.toList());
 //		return detailBiodataDtos;
 //	}
+
+	private StatusMessageDto dataBerhasil() {
+		StatusMessageDto statusMessageDto = new StatusMessageDto();
+		statusMessageDto.setStatus("true");
+		statusMessageDto.setMessage("data berhasil masuk");
+		return statusMessageDto;
+	}
+
+	private StatusMessageDto dataGagalNik() {
+		StatusMessageDto statusMessageDto = new StatusMessageDto();
+		statusMessageDto.setStatus("false");
+		statusMessageDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16");
+		return statusMessageDto;
+	}
+
+	private StatusMessageDto dataGagalUmur() {
+		StatusMessageDto statusMessageDto = new StatusMessageDto();
+		statusMessageDto.setStatus("false");
+		statusMessageDto.setMessage("data gagal masuk, umur kurang dari 30 tahun");
+		return statusMessageDto;
+	}
 
 	private PersonEntity convertToPersonEntity(DetailBiodataDto dto) {
 		PersonEntity personEntity = new PersonEntity();
