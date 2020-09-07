@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<div class="row mb-2" layout:fragment="content-header">
+	<div class="col-sm-6">
+		<h1 class="card-title">Form</h1>
+	</div>
+</div>
+
+<div class="card card-primary" layout:fragment="content-body">
+	<!-- HEADER -->
+	<div class="card-header">
+		<h1 class="card-title">Detail Biodata</h1>
+	</div>
+	<!-- BODY -->
+	<div class="card-body">
+		<form role="form" id="form1">
+			<div class="form-group">
+				<label for="idPerson">Id Person</label> <input type="number"
+					class="form-control" id="idPerson" placeholder="Id Person">
+			</div>
+			<div class="form-group">
+				<label for="nik">NIK</label> <input type="number"
+					class="form-control" id="nik" placeholder="NIK">
+			</div>
+			<div class="form-group">
+				<label for="name">Nama Lengkap</label> <input type="text"
+					class="form-control" id="name" placeholder="Nama Lengkap">
+			</div>
+			<div class="form-group">
+				<label for="alamat">Alamat</label> <input type="text"
+					class="form-control" id="alamat" placeholder="Alamat">
+			</div>
+			<div class="form-group">
+				<label for="hp">No. HP</label> <input type="number"
+					class="form-control" id="hp" placeholder="Alamat">
+			</div>
+		</form>
+	</div>
+	<!-- /.card-body -->
+	<!-- FOOTER -->
+	<div class="card-footer" align="Right">
+		<button id="btn" type="button"
+			class="btn btn-success swalDefaultSuccess">Submit</button>
+	</div>
+
+	<!-- Add table -->
+	<table id="tblAddRow" class="table table-head-fixed">
+		<thead>
+			<tr>
+				<th>NIK</th>
+				<th>Nama</th>
+				<th>Alamat</th>
+				<th>No. Hp</th>
+				<th>Tanggal Lahir</th>
+				<th>Tempat Lahir</th>
+				<th>Umur</th>
+				<th>Pendidikan Terakhir</th>
+			</tr>
+		</thead>
+
+		<tbody id="body">
+		</tbody>
+	</table>
+
+	<!-- jQuery -->
+	<script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.1/parsley.min.js"></script>
+	<!-- DataTables -->
+	<script th:src="@{/assets/plugins/datatables/jquery.dataTables.js}"></script>
+	<script
+		th:src="@{/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js}"></script>
+	<script th:src="@{/assets/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
+	<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+	<script>
+		$("#btn").click(function() {
+			Swal.fire({
+				position : 'top-end',
+				icon : 'success',
+				title : 'Form berhasil disimpan.',
+				showConfirmButton : false,
+				timer : 1500
+			});
+		});
+	</script>
+
+</div>
+
+</html>

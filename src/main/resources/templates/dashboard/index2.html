@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<div class="row mb-2" layout:fragment="content-header">
+	<div class="col-sm-6">
+		<h1 class="card-title">Form</h1>
+	</div>
+</div>
+
+<div class="card card-primary" layout:fragment="content-body">
+	<!-- HEADER -->
+	<div class="card-header">
+		<h1 class="card-title">Detail Biodata Pendidikan</h1>
+	</div>
+	<!-- BODY -->
+	<div class="card-body">
+		<form role="form" id="form1">
+			<fieldset>
+				<legend>Data Diri</legend>
+				<div class="form-group">
+					<label for="nik">NIK</label> <input type="number"
+						class="form-control" id="nik" placeholder="NIK">
+				</div>
+				<div class="form-group">
+					<label for="name">Nama Lengkap</label> <input type="text"
+						class="form-control" id="name" placeholder="Nama Lengkap">
+				</div>
+				<div class="form-group">
+					<label for="alamat">Alamat</label> <input type="text"
+						class="form-control" id="alamat" placeholder="Alamat">
+				</div>
+				<div class="form-group">
+					<label for="hp">No. HP</label> <input type="number"
+						class="form-control" id="hp" placeholder="Alamat">
+				</div>
+				<div class="form-group">
+					<label for="tanggal">Tanggal Lahir</label> <input type="date"
+						class="form-control" id="tanggal" placeholder="Tanggal Lahir">
+				</div>
+				<div class="form-group">
+					<label for="tempat">Tempat Lahir</label> <input type="text"
+						class="form-control" id="tempat" placeholder="Tempat Lahir">
+				</div>
+			</fieldset>
+
+			<div class="card-footer" align="Right">
+				<button id="btn" type="button"
+					class="btn btn-success swalDefaultSuccess">Submit</button>
+			</div>
+
+			<fieldset>
+				<legend>Pendidikan</legend>
+				<div class="form-group">
+					<label>Jenjang</label> <select class="form-control" id="jenjang">
+						<option>SD</option>
+						<option>SMP</option>
+						<option>SMA</option>
+						<option>D3</option>
+						<option>S1</option>
+						<option>S2</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="institusi">Institusi</label> <input type="text"
+						class="form-control" id="institusi"
+						placeholder="Institusi Pendidikan">
+				</div>
+				<div class="form-group">
+					<label for="masuk">Tahun Masuk</label> <input type="number"
+						class="form-control" id="masuk" placeholder="Tahun Masuk">
+				</div>
+				<div class="form-group">
+					<label for="lulus">Tahun Lulus</label> <input type="number"
+						class="form-control" id="lulus" placeholder="Tahun Lulus">
+				</div>
+			</fieldset>
+
+			<div class="card-footer" align="Right">
+				<button id="btn2" type="button"
+					class="btn btn-success swalDefaultSuccess">Submit</button>
+			</div>
+
+		</form>
+	</div>
+	<!-- /.card-body -->
+	<!-- FOOTER -->
+</div>
+
+<th:block layout:fragment="add-scripts">
+
+	<script>
+		$("#btn").click(function() {
+			var person = {
+				nik : $("#nik").val(),
+				name : $("#name").val(),
+				address : $("#alamat").val(),
+				hp : $("#hp").val(),
+				tgl : $("#tanggal").val(),
+				tempatLahir : $("#tempat").val
+			};
+
+			console.log(person);
+
+			$.ajax({
+				contentType : 'application/json',
+				type : 'post',
+				url : '/person',
+				data : JSON.stringify(person),
+				dataType : 'json',
+				success : function() {
+					alert('Success!');
+				},
+				error : function(xhr, status, thrownError) {
+					alert(xhr.status);
+					alert(thrownError);
+				}
+			});
+		});
+	</script>
+
+	<!-- 		$("#btn").click(function() {
+			Swal.fire({
+				position : 'top-end',
+				icon : 'success',
+				title : 'Form berhasil disimpan.',
+				showConfirmButton : false,
+				timer : 1500
+			});
+		});
+ -->
+
+</th:block>
+
+</html>
