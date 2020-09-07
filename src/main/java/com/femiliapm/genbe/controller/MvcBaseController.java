@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MvcBaseController {
 	@GetMapping("/person-biodata")
-	public String get() {
-		return "dashboard/person-biodata";
+	public String index() {
+		return "dashboard/index";
 	}
 
 	@GetMapping("/pendidikan")
-	public String getPend() {
-		return "dashboard/pendidikan";
+	public String index2() {
+		return "dashboard/index2";
 	}
 }
