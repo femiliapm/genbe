@@ -2,7 +2,7 @@ package com.femiliapm.genbe.controller;
 
 //import java.text.ParsePosition;
 //import java.text.SimpleDateFormat;
-//import java.util.Calendar;
+import java.util.Calendar;
 
 //import java.util.List;
 //import java.util.stream.Collectors;
@@ -43,14 +43,16 @@ public class PersonController {
 	public StatusMessageDto insert(@RequestBody DetailBiodataDto dto) {
 //		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //		ParsePosition parsePosition = new ParsePosition(0);
-//		Calendar cal = Calendar.getInstance();
-//		cal.setTime(dto.getTgl());
-//		int month = cal.get(Calendar.MONTH) + 1;
-//		int year = cal.get(Calendar.YEAR);
-//		int day = cal.get(Calendar.DATE);
-		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dto.getTgl());
+		int month = cal.get(Calendar.MONTH) + 1;
+		int year = cal.get(Calendar.YEAR);
+		int day = cal.get(Calendar.DATE);
+
 		if (dto.getNik().length() != 16) {
 			return dataGagalNik();
+		} else if (2020 - year < 30 || month < 9 || day < 7) {
+			return dataGagalUmur();
 		} else {
 			PersonEntity personEntity = convertToPersonEntity(dto);
 //			personRepository.save(personEntity);
