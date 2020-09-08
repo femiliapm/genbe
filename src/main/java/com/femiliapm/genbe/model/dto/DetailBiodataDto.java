@@ -12,7 +12,7 @@ public class DetailBiodataDto {
 //	private Integer idBio;
 	private String hp;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
 	private Date tgl;
 
 	private String tempatLahir;
