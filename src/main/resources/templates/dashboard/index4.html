@@ -1,0 +1,58 @@
+<!-- Modals untuk soal No.2 -->
+<!DOCTYPE html>
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<div class="row mb-2" layout:fragment="content-header">
+	<div class="col-sm-6">
+		<h1 class="m-0 text-dark">Biodata</h1>
+	</div>
+	<div class="col-sm-6">
+		<ol class="breadcrumb float-sm-right">
+			<li class="breadcrumb-item"><a href="#">Biodata</a></li>
+			<li class="breadcrumb-item active">Kelola</li>
+		</ol>
+	</div>
+</div>
+
+<div class="row" layout:fragment="content-body">
+
+
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h1 class="card-title">Search NIK</h1>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+				<div class="form-group">
+					<label>NIK : </label> <input class="form-control" id="nik"
+						name="nik" placeholder="NIK" required type="number"> <br>
+					<button class="btn-primary" id="btn-search">Cari</button>
+				</div>
+			</div>
+			<div class="card-body table-responsive">
+				<table class="table table-striped table-bordered table-hover nowrap"
+					id="tableBiodata" style="width: 100%"></table>
+			</div>
+			<!-- /.card-body -->
+		</div>
+		<!-- /.card -->
+	</div>
+	<!-- /.col -->
+</div>
+
+<th:block layout:fragment="add-scripts">
+	<script th:src="@{/assets/js/person.js}"></script>
+
+	<script>
+		/* 		tableBiodata.create(); */
+
+		$('#btn-search').click(function() {
+			formBiodata.getDataByNik($('#nik').val());
+		});
+	</script>
+</th:block>
+
+</html>
