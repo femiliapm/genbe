@@ -7,5 +7,5 @@ import com.femiliapm.genbe.model.entity.BiodataEntity;
 
 @Repository
 public interface BiodataRepository extends JpaRepository<BiodataEntity, Integer>{
-
+	BiodataEntity findByPersonEntityPersonId(Integer idPerson);
 }

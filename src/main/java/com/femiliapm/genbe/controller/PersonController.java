@@ -2,15 +2,14 @@ package com.femiliapm.genbe.controller;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-//import java.util.Calendar;
-//import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 //import java.util.stream.Collectors;
 //import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,18 +68,35 @@ public class PersonController {
 		}
 	}
 
-	@GetMapping("/{nik}")
-	public DetailBiodataDto get(@PathVariable Integer idPerson) {
-		PersonEntity personEntity = personRepository.findById(idPerson).get();
-		BiodataEntity biodataEntity = biodataRepository.findById(idPerson).get();
-		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
-		detailBiodataDto.setNik(personEntity.getNiKep());
-		detailBiodataDto.setName(personEntity.getNama());
-		detailBiodataDto.setAddress(personEntity.getAlamat());
-		detailBiodataDto.setHp(biodataEntity.getNohp());
-		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
-		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
-		return detailBiodataDto;
+	@GetMapping
+	public List<DetailBiodataDto> get() {
+		List<PersonEntity> personEntities = personRepository.findAll();
+		List<DetailBiodataDto> detailBiodataDtos = new ArrayList<>();
+		for (PersonEntity p : personEntities) {
+			DetailBiodataDto dto = new DetailBiodataDto();
+			BiodataEntity biodataEntity = biodataRepository.findByPersonEntityPersonId(p.getPersonId());
+			dto.setIdPerson(p.getPersonId());
+			dto.setAddress(p.getAlamat());
+			dto.setHp(biodataEntity.getNohp());
+			dto.setName(p.getNama());
+			dto.setNik(p.getNiKep());
+			dto.setTempatLahir(biodataEntity.getTmptLahir());
+			dto.setTgl(biodataEntity.getTglLahir());
+			detailBiodataDtos.add(dto);
+		}
+		return detailBiodataDtos;
+
+//
+//		PersonEntity personEntity = personRepository.findById(idPerson).get();
+//		BiodataEntity biodataEntity = biodataRepository.findById(idPerson).get();
+//		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+//		detailBiodataDto.setNik(personEntity.getNiKep());
+//		detailBiodataDto.setName(personEntity.getNama());
+//		detailBiodataDto.setAddress(personEntity.getAlamat());
+//		detailBiodataDto.setHp(biodataEntity.getNohp());
+//		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
+//		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
+//		return detailBiodataDto;
 	}
 
 	private StatusMessageDto dataBerhasil() {
