@@ -1,15 +1,16 @@
 package com.femiliapm.genbe.controller;
 
-//import java.text.ParsePosition;
-//import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
+import java.time.LocalDate;
+import java.time.ZoneId;
+//import java.util.Calendar;
 //import java.util.List;
+
 //import java.util.stream.Collectors;
 //import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ import com.femiliapm.genbe.service.AllServiceImpl;
 @RequestMapping("/person")
 public class PersonController {
 	private final PersonRepository personRepository;
-//	private final BiodataRepository biodataRepository;
+	private final BiodataRepository biodataRepository;
 
 	@Autowired
 	private AllService personService = new AllServiceImpl();
@@ -36,22 +37,25 @@ public class PersonController {
 	@Autowired
 	public PersonController(PersonRepository personRepository, BiodataRepository biodataRepository) {
 		this.personRepository = personRepository;
-//		this.biodataRepository = biodataRepository;
+		this.biodataRepository = biodataRepository;
 	}
 
 	@PostMapping
 	public StatusMessageDto insert(@RequestBody DetailBiodataDto dto) {
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		ParsePosition parsePosition = new ParsePosition(0);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dto.getTgl());
-		int month = cal.get(Calendar.MONTH) + 1;
-		int year = cal.get(Calendar.YEAR);
-		int day = cal.get(Calendar.DATE);
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(dto.getTgl());
+//		int month = cal.get(Calendar.MONTH) + 1;
+//		int year = cal.get(Calendar.YEAR);
+//		int day = cal.get(Calendar.DATE);
+
+		LocalDate localDate = dto.getTgl().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int tahun = localDate.getYear();
+		int bulan = localDate.getMonthValue();
+		int hari = localDate.getDayOfMonth();
 
 		if (dto.getNik().length() != 16) {
 			return dataGagalNik();
-		} else if (2020 - year < 30 || month < 9 || day < 7) {
+		} else if (2020 - tahun < 30 && bulan < 9 && hari < 7) {
 			return dataGagalUmur();
 		} else {
 			PersonEntity personEntity = convertToPersonEntity(dto);
@@ -65,18 +69,19 @@ public class PersonController {
 		}
 	}
 
-//	@GetMapping("/{nik}")
-//	public List<DetailBiodataDto> get() {
-//		List<PersonEntity> personEntities = personRepository.findAll();
-//		List<BiodataEntity> biodataEntities = biodataRepository.findAll();
-//		List<DetailBiodataDto> detailPerson = personEntities.stream().map(this::convertToDtoFromPerson)
-//				.collect(Collectors.toList());
-//		List<DetailBiodataDto> detailBiodata = biodataEntities.stream().map(this::convertToDtoFromBiodata)
-//				.collect(Collectors.toList());
-//		List<DetailBiodataDto> detailBiodataDtos = Stream.of(detailPerson, detailBiodata).flatMap(x -> x.stream())
-//				.collect(Collectors.toList());
-//		return detailBiodataDtos;
-//	}
+	@GetMapping("/{nik}")
+	public DetailBiodataDto get(@PathVariable Integer idPerson) {
+		PersonEntity personEntity = personRepository.findById(idPerson).get();
+		BiodataEntity biodataEntity = biodataRepository.findById(idPerson).get();
+		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+		detailBiodataDto.setNik(personEntity.getNiKep());
+		detailBiodataDto.setName(personEntity.getNama());
+		detailBiodataDto.setAddress(personEntity.getAlamat());
+		detailBiodataDto.setHp(biodataEntity.getNohp());
+		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
+		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
+		return detailBiodataDto;
+	}
 
 	private StatusMessageDto dataBerhasil() {
 		StatusMessageDto statusMessageDto = new StatusMessageDto();
