@@ -14,4 +14,9 @@ public class MvcBaseController {
 	public String index2() {
 		return "dashboard/index2";
 	}
+	
+	@GetMapping("/person-modal")
+	public String index3() {
+		return "dashboard/index3";
+	}
 }
