@@ -1,9 +1,12 @@
 package com.femiliapm.genbe.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.femiliapm.genbe.model.dto.PendidikanDto;
 import com.femiliapm.genbe.model.entity.BiodataEntity;
 import com.femiliapm.genbe.model.entity.PendidikanEntity;
 import com.femiliapm.genbe.model.entity.PersonEntity;
@@ -41,4 +44,30 @@ public class AllServiceImpl implements AllService {
 		PendidikanEntity entity = pendidikanRepository.save(pendidikanEntity);
 		return entity;
 	}
+
+	@Override
+	public void insertPendidikan(List<PendidikanDto> pendidikanDtos, Integer idPerson) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < pendidikanDtos.size(); i++) {
+			PendidikanEntity pendidikanEntity = convertToPendidikanEntity(pendidikanDtos.get(i), idPerson);
+			if (pendidikanEntity.equals(null)) {
+				
+			}
+			pendidikanEntity.setPersonEntity(personRepository.findById(idPerson).get());
+			pendidikanRepository.save(pendidikanEntity);
+		}
+	}
+
+	private PendidikanEntity convertToPendidikanEntity(PendidikanDto dto, Integer idPerson) {
+		PersonEntity personEntity = new PersonEntity();
+		personEntity = personRepository.findById(dto.getIdPerson()).get();
+		PendidikanEntity pendidikanEntity = new PendidikanEntity();
+		pendidikanEntity.setInstitution(dto.getInstitusi());
+		pendidikanEntity.setLevel(dto.getJenjang());
+		pendidikanEntity.setThnLulus(dto.getLulus());
+		pendidikanEntity.setThnMasuk(dto.getMasuk());
+		pendidikanEntity.setPersonEntity(personEntity);
+		return pendidikanEntity;
+	}
+
 }

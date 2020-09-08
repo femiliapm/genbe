@@ -1,8 +1,10 @@
 package com.femiliapm.genbe.controller;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 //import java.util.stream.Collectors;
@@ -10,16 +12,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.femiliapm.genbe.model.dto.DetailBiodataDto;
+import com.femiliapm.genbe.model.dto.StatusMessageDto2;
 import com.femiliapm.genbe.model.dto.StatusMessageDto;
 import com.femiliapm.genbe.model.entity.BiodataEntity;
 import com.femiliapm.genbe.model.entity.PersonEntity;
 import com.femiliapm.genbe.repository.BiodataRepository;
+import com.femiliapm.genbe.repository.PendidikanRepository;
 import com.femiliapm.genbe.repository.PersonRepository;
 import com.femiliapm.genbe.service.AllService;
 import com.femiliapm.genbe.service.AllServiceImpl;
@@ -29,14 +34,17 @@ import com.femiliapm.genbe.service.AllServiceImpl;
 public class PersonController {
 	private final PersonRepository personRepository;
 	private final BiodataRepository biodataRepository;
+	private final PendidikanRepository pendidikanRepository;
 
 	@Autowired
 	private AllService personService = new AllServiceImpl();
 
 	@Autowired
-	public PersonController(PersonRepository personRepository, BiodataRepository biodataRepository) {
+	public PersonController(PersonRepository personRepository, BiodataRepository biodataRepository,
+			PendidikanRepository pendidikanRepository) {
 		this.personRepository = personRepository;
 		this.biodataRepository = biodataRepository;
+		this.pendidikanRepository = pendidikanRepository;
 	}
 
 	@PostMapping
@@ -99,6 +107,31 @@ public class PersonController {
 //		return detailBiodataDto;
 	}
 
+	@GetMapping("/{nik}")
+	public List<Object> getByNik(@PathVariable String nik) {
+		List<Object> data = new ArrayList<>();
+		StatusMessageDto statusMessageDto = new StatusMessageDto();
+		StatusMessageDto2 statusMessageDto2 = new StatusMessageDto2();
+		if (nik.length() == 16) {
+			if (!(personRepository.findByNiKep(nik).isEmpty())) {
+				DetailBiodataDto detailBiodataDto = convertToDto(nik);
+				statusMessageDto2.setStatus("true");
+				statusMessageDto2.setMessage("success");
+				statusMessageDto2.setData(detailBiodataDto);
+				data.add(statusMessageDto2);
+			} else {
+				statusMessageDto.setStatus("true");
+				statusMessageDto.setMessage("data dengan nik " + nik + " tidak ditemukan");
+				data.add(statusMessageDto);
+			}
+		} else {
+			statusMessageDto.setStatus("false");
+			statusMessageDto.setMessage("data gagal masuk, jumlah digit nik tidak sama dengan 16");
+			data.add(statusMessageDto);
+		}
+		return data;
+	}
+
 	private StatusMessageDto dataBerhasil() {
 		StatusMessageDto statusMessageDto = new StatusMessageDto();
 		statusMessageDto.setStatus("true");
@@ -139,14 +172,25 @@ public class PersonController {
 		return biodataEntity;
 	}
 
-//	private DetailBiodataDto convertToDtoFromPerson(PersonEntity personEntity) {
-//		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
-//		detailBiodataDto.setNik(personEntity.getNiKep());
-//		detailBiodataDto.setName(personEntity.getNama());
-//		detailBiodataDto.setAddress(personEntity.getAlamat());
-//		return detailBiodataDto;
-//	}
-//
+	private DetailBiodataDto convertToDto(String nik) {
+		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+		PersonEntity personEntity = personRepository.findByNiKep(nik).get(0);
+		BiodataEntity biodataEntity = biodataRepository.findByPersonEntityPersonId(personEntity.getPersonId());
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(biodataEntity.getTglLahir());
+
+		detailBiodataDto.setAddress(personEntity.getAlamat());
+		detailBiodataDto.setHp(biodataEntity.getNohp());
+		detailBiodataDto.setName(personEntity.getNama());
+		detailBiodataDto.setNik(personEntity.getNiKep());
+		detailBiodataDto.setPendidikan_terakhir(pendidikanRepository.pendidikan_terakhir(personEntity.getPersonId()));
+		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
+		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
+		detailBiodataDto.setUmur(Year.now().getValue() - cal.get(Calendar.YEAR));
+		return detailBiodataDto;
+	}
+
 //	private DetailBiodataDto convertToDtoFromBiodata(BiodataEntity biodataEntity) {
 //		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
 //		detailBiodataDto.setHp(biodataEntity.getNohp());
