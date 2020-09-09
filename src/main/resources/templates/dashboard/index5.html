@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html layout:decorate="~{base}" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<div class="row mb-2" layout:fragment="content-header">
+	<div class="col-sm-6">
+		<h1 class="m-0 text-dark">Biodata</h1>
+	</div>
+	<div class="col-sm-6">
+		<ol class="breadcrumb float-sm-right">
+			<li class="breadcrumb-item"><a href="#">Biodata</a></li>
+			<li class="breadcrumb-item active">Kelola</li>
+		</ol>
+	</div>
+</div>
+
+<div class="row" layout:fragment="content-body">
+
+
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h1 class="card-title">List Pendidikan</h1>
+			</div>
+			<!-- /.card-header -->
+			<!-- card-body -->
+			<div class="card-body">
+				<div class="form-group">
+					<label>Id Person</label> <input type="number" class="form-control"
+						id="idPerson" placeholder="idPerson" name="idPerson"> <br>
+					<button class="btn-primary" id="btn-tambah-biodata">Tambah</button>
+				</div>
+			</div>
+			<div class="card-body table-responsive">
+				<table class="table table-striped table-bordered table-hover nowrap"
+					id="tableBiodata" style="width: 100%"></table>
+				<div class="card-body" align="Right">
+					<button class="btn btn-success swalDefaultSuccess" id="btn-submit">Submit</button>
+				</div>
+			</div>
+			<div class="card-body table-responsive">
+				<table class="table table-striped table-bordered table-hover nowrap"
+					id="tableBiodata2" style="width: 100%"></table>
+			</div>
+			<!-- /.card-body -->
+		</div>
+		<!-- /.card -->
+	</div>
+	<!-- /.col -->
+
+	<div class="modal fade" id="modal-biodata">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Form Biodata Pendidikan</h4>
+					<button aria-label="Close" class="close" data-dismiss="modal"
+						type="button">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="card-header"></div>
+					<form id="form-biodata" role="form">
+						<!-- 						<input name="id" type="hidden" /> -->
+
+						<div class="form-group">
+							<label>Jenjang</label> <select class="form-control" id="jenjang"
+								name="jenjang">
+								<option>SD</option>
+								<option>SMP</option>
+								<option>SMA</option>
+								<option>D3</option>
+								<option>S1</option>
+								<option>S2</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="institusi">Institusi</label> <input type="text"
+								class="form-control" id="institusi" name="institusi"
+								placeholder="Institusi Pendidikan">
+						</div>
+						<div class="form-group">
+							<label for="masuk">Tahun Masuk</label> <input type="number"
+								class="form-control" id="masuk" placeholder="Tahun Masuk"
+								name="masuk">
+						</div>
+						<div class="form-group">
+							<label for="lulus">Tahun Lulus</label> <input type="number"
+								class="form-control" id="lulus" placeholder="Tahun Lulus"
+								name="lulus">
+						</div>
+
+
+					</form>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+					<button class="btn btn-primary" id="btn-save-biodata" type="button">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+</div>
+
+<th:block layout:fragment="add-scripts">
+	<script th:src="@{/assets/js/pendidikan.js}"></script>
+
+	<script>
+		var input = [];
+		tableBiodata.create();
+
+		$('#btn-tambah-biodata').click(function() {
+			formBiodata.resetForm();
+			$('#modal-biodata').modal('show')
+		});
+
+		$('#btn-save-biodata').click(function() {
+			formBiodata.saveFormPend($('#idPerson').val());
+		});
+
+		$('#btn-submit').click(function() {
+			formBiodata.submitFormPend();
+		});
+	</script>
+</th:block>
+
+</html>
