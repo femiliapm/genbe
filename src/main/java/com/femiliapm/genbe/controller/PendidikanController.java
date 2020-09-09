@@ -1,5 +1,6 @@
 package com.femiliapm.genbe.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,19 @@ public class PendidikanController {
 		return pendidikanDtos;
 	}
 
+	@GetMapping("/{idPerson}")
+	public List<PendidikanDto> get(@PathVariable Integer idPerson) {
+//		List<Object> data = new ArrayList<>();
+		if (pendidikanRepository.findById(idPerson).isPresent()) {
+			List<PendidikanDto> pendidikanDtos = convertToPendidikanDtoList(
+					pendidikanRepository.findById(idPerson).get());
+//			PendidikanDto pendidikanDto = convertToPendidikanDto(pendidikanRepository.findById(idPerson).get());
+//			data.add(pendidikanDto);
+			return pendidikanDtos;
+		}
+		return null;
+	}
+
 	private StatusMessageDto dataBerhasil() {
 		StatusMessageDto statusMessageDto = new StatusMessageDto();
 		statusMessageDto.setStatus("true");
@@ -107,5 +121,17 @@ public class PendidikanController {
 		pendidikanDto.setLulus(entity.getThnLulus());
 		pendidikanDto.setMasuk(entity.getThnMasuk());
 		return pendidikanDto;
+	}
+
+	private List<PendidikanDto> convertToPendidikanDtoList(PendidikanEntity entity) {
+		List<PendidikanDto> data = new ArrayList<>();
+		PendidikanDto pendidikanDto = new PendidikanDto();
+//		pendidikanDto.setIdPerson(entity.getPersonEntity().getPersonId());
+		pendidikanDto.setInstitusi(entity.getInstitution());
+		pendidikanDto.setJenjang(entity.getLevel());
+		pendidikanDto.setLulus(entity.getThnLulus());
+		pendidikanDto.setMasuk(entity.getThnMasuk());
+		data.add(pendidikanDto);
+		return data;
 	}
 }

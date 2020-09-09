@@ -65,6 +65,26 @@ var formBiodata = {
                 console.log(err);
             }
         });
+    },
 
+    setEditData: function (idCabang) {
+        formBiodata.resetForm();
+
+        $.ajax({
+            url: '/api/pendidikan/' + idCabang,
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (res, status, xhr) {
+                if (xhr.status == 200 || xhr.status == 201) {
+                    $('#form-biodata').fromJSON(JSON.stringify(res));
+                    $('#modal-biodata').modal('show')
+
+                } else {}
+            },
+            erorrr: function (err) {
+                console.log(err);
+            }
+        });
     }
 };
