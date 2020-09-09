@@ -60,7 +60,7 @@ public class AllServiceImpl implements AllService {
 
 	private PendidikanEntity convertToPendidikanEntity(PendidikanDto dto, Integer idPerson) {
 		PersonEntity personEntity = new PersonEntity();
-		personEntity = personRepository.findById(dto.getIdPerson()).get();
+		personEntity = personRepository.findById(idPerson).get();
 		PendidikanEntity pendidikanEntity = new PendidikanEntity();
 		pendidikanEntity.setInstitution(dto.getInstitusi());
 		pendidikanEntity.setLevel(dto.getJenjang());
