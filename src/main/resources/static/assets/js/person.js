@@ -37,7 +37,8 @@ var tableBiodata = {
                                 title: "Action",
                                 data: null,
                                 render: function (data, type, row) {
-                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id + "')>Edit</button>"
+                                    console.log(data)
+                                    return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.idBio + "')>Edit</button>"
                                 }
                             }
                         ]
@@ -68,6 +69,7 @@ var formBiodata = {
                 dataType: 'json',
                 data: JSON.stringify(dataResult),
                 success: function (res, status, xhr) {
+                    console.log(JSON.stringify(dataResult))
                     if (xhr.status == 200 || xhr.status == 201) {
                         tableBiodata.create();
                         $('#modal-biodata').modal('hide');
@@ -77,6 +79,7 @@ var formBiodata = {
                 },
                 error: function (err) {
                     console.log(err);
+                    console.log(JSON.stringify(dataResult))
                 }
             });
         }
@@ -85,7 +88,7 @@ var formBiodata = {
         formBiodata.resetForm();
 
         $.ajax({
-            url: '/person' + idCabang,
+            url: '/person/-id/' + idCabang,
             method: 'get',
             contentType: 'application/json',
             dataType: 'json',
@@ -113,8 +116,8 @@ var formBiodata = {
             method: 'get',
             contentType: 'application/json',
             dataType: 'json',
-            success: function(result) {
-                if(result[0].status == 'true') {
+            success: function (result) {
+                if (result[0].status == 'true') {
                     $('#tableBiodata').DataTable({
                         data: [result[0].data],
                         columns: [{
@@ -150,10 +153,8 @@ var formBiodata = {
                             }
                         ]
                     });
-                } else {
-					
-				}
-				console.log(result);
+                } else {}
+                console.log(result);
             },
             error: function (err) {
                 console.log(err);

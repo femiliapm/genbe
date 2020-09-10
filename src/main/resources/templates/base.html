@@ -29,7 +29,11 @@
 <link
 	href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css"
 	rel="stylesheet">
-
+<!-- SweetAlert2 -->
+<link rel="stylesheet"
+	th:href="@{/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css}">
+<!-- Toastr -->
+<link rel="stylesheet" th:href="@{/assets/plugins/toastr/toastr.min.css}">
 <!-- Theme style -->
 <link rel="stylesheet" th:href="@{/assets/dist/css/adminlte.min.css}">
 <!-- Google Font: Source Sans Pro -->
@@ -273,7 +277,9 @@ to get the desired effect
 	<!-- AdminLTE -->
 	<script th:src="@{/assets/dist/js/adminlte.js}"></script>
 	<!-- SweetAlert -->
-	<!-- 	<script th:src="@{/assets/plugins/sweetalert2/sweetalert2.all.min.js}"></script> -->
+	<script th:src="@{/assets/plugins/sweetalert2/sweetalert2.all.min.js}"></script>
+	<!-- Toastr -->
+	<script th:src="@{/assets/plugins/toastr/toastr.min.js}"></script>
 
 	<th:block layout:fragment="add-scripts">
 	</th:block>

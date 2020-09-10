@@ -49,12 +49,6 @@ public class PersonController {
 
 	@PostMapping
 	public StatusMessageDto insert(@RequestBody DetailBiodataDto dto) {
-//		Calendar cal = Calendar.getInstance();
-//		cal.setTime(dto.getTgl());
-//		int month = cal.get(Calendar.MONTH) + 1;
-//		int year = cal.get(Calendar.YEAR);
-//		int day = cal.get(Calendar.DATE);
-
 		LocalDate localDate = dto.getTgl().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		int tahun = localDate.getYear();
 		int bulan = localDate.getMonthValue();
@@ -69,6 +63,7 @@ public class PersonController {
 //			personRepository.save(personEntity);
 			personService.insertDataPerson(personEntity);
 			dto.setIdPerson(personEntity.getPersonId());
+			personEntity = personRepository.findById(personEntity.getPersonId()).get();
 			BiodataEntity biodataEntity = convertToBiodataEntity(dto);
 //			biodataRepository.save(biodataEntity);
 			personService.insertDataBiodata(biodataEntity);
@@ -90,21 +85,10 @@ public class PersonController {
 			dto.setNik(p.getNiKep());
 			dto.setTempatLahir(biodataEntity.getTmptLahir());
 			dto.setTgl(biodataEntity.getTglLahir());
+			dto.setIdBio(biodataEntity.getBioId());
 			detailBiodataDtos.add(dto);
 		}
 		return detailBiodataDtos;
-
-//
-//		PersonEntity personEntity = personRepository.findById(idPerson).get();
-//		BiodataEntity biodataEntity = biodataRepository.findById(idPerson).get();
-//		DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
-//		detailBiodataDto.setNik(personEntity.getNiKep());
-//		detailBiodataDto.setName(personEntity.getNama());
-//		detailBiodataDto.setAddress(personEntity.getAlamat());
-//		detailBiodataDto.setHp(biodataEntity.getNohp());
-//		detailBiodataDto.setTgl(biodataEntity.getTglLahir());
-//		detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
-//		return detailBiodataDto;
 	}
 
 	@GetMapping("/{nik}")
@@ -131,6 +115,23 @@ public class PersonController {
 		}
 		return data;
 	}
+	
+    @GetMapping("-id/{idBio}")
+    public DetailBiodataDto getBiodata(@PathVariable Integer idBio) {
+        BiodataEntity biodataEntity = biodataRepository.findById(idBio).get();
+        DetailBiodataDto detailBiodataDto = new DetailBiodataDto();
+        // jika tidak pakai model mapper maka perlu setter getter satu satu
+        detailBiodataDto.setAddress(biodataEntity.getPersonEntity().getAlamat());
+        detailBiodataDto.setHp(biodataEntity.getNohp());
+        detailBiodataDto.setIdBio(biodataEntity.getBioId());
+        detailBiodataDto.setIdPerson(biodataEntity.getPersonEntity().getPersonId());
+        detailBiodataDto.setName(biodataEntity.getPersonEntity().getNama());
+        detailBiodataDto.setNik(biodataEntity.getPersonEntity().getNiKep());
+        detailBiodataDto.setTempatLahir(biodataEntity.getTmptLahir());
+        detailBiodataDto.setTgl(biodataEntity.getTglLahir());
+        return detailBiodataDto;
+    }
+
 
 	private StatusMessageDto dataBerhasil() {
 		StatusMessageDto statusMessageDto = new StatusMessageDto();
@@ -158,6 +159,7 @@ public class PersonController {
 		personEntity.setNiKep(dto.getNik());
 		personEntity.setNama(dto.getName());
 		personEntity.setAlamat(dto.getAddress());
+		personEntity.setPersonId(dto.getIdPerson());
 		return personEntity;
 	}
 
@@ -169,6 +171,7 @@ public class PersonController {
 		biodataEntity.setTglLahir(dto.getTgl());
 		biodataEntity.setTmptLahir(dto.getTempatLahir());
 		biodataEntity.setPersonEntity(personEntity);
+		biodataEntity.setBioId(dto.getIdBio());
 		return biodataEntity;
 	}
 

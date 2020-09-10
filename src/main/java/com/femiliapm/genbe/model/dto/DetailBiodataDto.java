@@ -9,7 +9,7 @@ public class DetailBiodataDto {
 	private String nik;
 	private String name;
 	private String address;
-//	private Integer idBio;
+	private Integer idBio;
 	private String hp;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
@@ -51,13 +51,13 @@ public class DetailBiodataDto {
 		this.address = address;
 	}
 
-//	public Integer getIdBio() {
-//		return idBio;
-//	}
-//
-//	public void setIdBio(Integer idBio) {
-//		this.idBio = idBio;
-//	}
+	public Integer getIdBio() {
+		return idBio;
+	}
+
+	public void setIdBio(Integer idBio) {
+		this.idBio = idBio;
+	}
 
 	public String getHp() {
 		return hp;
