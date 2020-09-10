@@ -24,8 +24,8 @@ var tableBiodata = {
                 }, {
                     title: "Action",
                     data: null,
-                    render: function (data, type, row) {
-                        return "<button class='btn-primary' onclick=formBiodata.setEditData('" + data.id + "')>Edit</button>"
+                    render: function (data, type, row, meta) {
+                        return "<button class='btn-primary' onclick=formBiodata.setEditData('" + meta.row + "')>Edit</button>"
                     }
                 }
             ]
@@ -67,24 +67,17 @@ var formBiodata = {
         });
     },
 
-    setEditData: function (idCabang) {
-        formBiodata.resetForm();
+    setEditData: function (index) {
+        $('#form-biodata').fromJSON(JSON.stringify(input[index]));
+        $('#modal-biodata').modal('show')
+        newIn = index
+    },
 
-        $.ajax({
-            url: '/api/pendidikan/' + idCabang,
-            method: 'get',
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function (res, status, xhr) {
-                if (xhr.status == 200 || xhr.status == 201) {
-                    $('#form-biodata').fromJSON(JSON.stringify(res));
-                    $('#modal-biodata').modal('show')
-
-                } else {}
-            },
-            erorrr: function (err) {
-                console.log(err);
-            }
-        });
+    saveFormPendEdit: function () {
+        var dataResult = getJsonForm($('#form-biodata').serializeArray(), true);
+        input[newIn] = dataResult;
+        tableBiodata.create();
+        $('#modal-biodata').modal('hide')
+        newIn = -1;
     }
 };
