@@ -1,6 +1,7 @@
 package com.femiliapm.genbe.controller;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.Year;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -50,13 +51,12 @@ public class PersonController {
 	@PostMapping
 	public StatusMessageDto insert(@RequestBody DetailBiodataDto dto) {
 		LocalDate localDate = dto.getTgl().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		int tahun = localDate.getYear();
-		int bulan = localDate.getMonthValue();
-		int hari = localDate.getDayOfMonth();
+		LocalDate tomorrowDate = LocalDate.now().plusDays(1);
+		int umur = Period.between(localDate, tomorrowDate).getYears();
 
 		if (dto.getNik().length() != 16) {
 			return dataGagalNik();
-		} else if (2020 - tahun < 30 && bulan < 9 && hari < 7) {
+		} else if (umur < 30) {
 			return dataGagalUmur();
 		} else {
 			PersonEntity personEntity = convertToPersonEntity(dto);
