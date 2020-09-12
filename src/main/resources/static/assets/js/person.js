@@ -69,12 +69,18 @@ var formBiodata = {
                 dataType: 'json',
                 data: JSON.stringify(dataResult),
                 success: function (res, status, xhr) {
-                    console.log(JSON.stringify(dataResult))
-                    if (xhr.status == 200 || xhr.status == 201) {
+                    var response = res.status;
+                    var message = res.message;
+                    console.log(response);
+                    console.log(message);
+                    if (response == 'true') {
                         tableBiodata.create();
                         $('#modal-biodata').modal('hide');
-                        alert('Success! Data has been saved!');
-                        console.log(res);
+                        alert('{status: "true", message: "data berhasil masuk"}');
+                    } else if (response == 'false' && message.includes('nik')) {
+                        alert('{status: "false", message: "data gagal masuk, jumlah digit nik tidak sama dengan 16"}');
+                    } else if (response == 'false' && message.includes('umur')) {
+                        alert('{status: "false", message: "data gagal masuk, umur kurang dari 30 tahun"}');
                     } else {}
                 },
                 error: function (err) {
@@ -117,7 +123,7 @@ var formBiodata = {
             contentType: 'application/json',
             dataType: 'json',
             success: function (result) {
-                if (result[0].status == 'true') {
+                if (result[0].status == 'true' && result[0].message == 'success') {
                     $('#tableBiodata').DataTable({
                         data: [result[0].data],
                         columns: [{
@@ -153,7 +159,12 @@ var formBiodata = {
                             }
                         ]
                     });
-                } else {}
+                    alert('{status: "true", message: "success"}');
+                } else if (result[0].status == 'true' && result[0].message.includes('ditemukan')) {
+                    alert('{status: "true", message: "data dengan nik ' + nik + ' tidak tersedia"}');
+                } else if (result[0].status == 'false' && result[0].message.includes('gagal')) {
+                    alert('{status: "true", message: "data dengan nik ' + nik + ' tidak tersedia"}');					
+				}
                 console.log(result);
             },
             error: function (err) {

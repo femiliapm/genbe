@@ -2,7 +2,7 @@ package com.femiliapm.genbe.model.dto;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+// import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DetailBiodataDto {
 	private Integer idPerson;
@@ -12,7 +12,7 @@ public class DetailBiodataDto {
 	private Integer idBio;
 	private String hp;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date tgl;
 
 	private String tempatLahir;
